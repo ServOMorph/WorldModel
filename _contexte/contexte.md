@@ -1,7 +1,7 @@
 # Contexte — worldmodel
 
 ## Objectif (immuable sauf décision explicite)
-Installer et utiliser en local un world model interactif (Waypoint-1.5 360p via le client Biome) sur une RTX 4060 8 Go.
+Installer et utiliser en local un world model interactif sur une RTX 4060 8 Go.
 
 ## Stack / contraintes techniques (stable, rarement modifié)
 Windows, Biome, Python, nvidia-smi
