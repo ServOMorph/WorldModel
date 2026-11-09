@@ -4,7 +4,7 @@
 Installer et utiliser en local un world model interactif sur une RTX 4060 8 Go.
 
 ## Stack / contraintes techniques (stable, rarement modifié)
-Windows, Biome, Python, nvidia-smi
+Windows, Python, nvidia-smi
 
 ## État actuel (réécrit intégralement à chaque /close)
 Projet initialisé. Aucun livrable produit.
