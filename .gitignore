@@ -7,3 +7,10 @@ credentials*.json
 *token*.json
 *.token
 .claude/settings.local.json
+.venv/
+.python/
+.uv-cache/
+models/
+__pycache__/
+.pytest_cache/
+third_party/
