@@ -46,3 +46,19 @@ Estimation sans chargement GPU, à partir des fichiers de poids et du code de `t
 ## Prochaine étape
 
 Écrire l'adaptateur avec offload et mesurer uniquement après jeton VertIA_v3 et estimation validée.
+
+## Mesure (2026-11-13, `tools/measure_matrix_game.py`, smoke 3 blocs)
+
+Configuration : CLIP sur CPU hors de l'encodage initial (tour visuel seul passé sur GPU avant le chargement du DiT), VAE encodeur renvoyé sur CPU après l'encodage, `torch.compile` désactivé, `flash_attn` remplacé par SDPA (shim), garde-fou à 7,5 Go de VRAM carte.
+
+| Essai | Phase d'arrêt | Alloué | Réservé | Carte |
+|---|---|---|---|---|
+| 1 | bloc 1 en cours | 5,76 Go | 6,44 Go | 7,80 Go |
+| 2 (`expandable_segments`) | bloc 1 en cours | 6,96 Go | 7,17 Go | 8,00 Go |
+
+- Les trois phases avant les blocs (CLIP, encodage VAE, chargement du DiT) passent sous le garde-fou.
+- Le garde-fou s'est déclenché pendant la génération du premier bloc. Aucun bloc terminé : aucun FPS mesuré.
+- Le pic réel n'est pas connu (le processus est arrêté à 7,5 Go carte). Il est supérieur à 6,96 Go alloués dans le processus.
+- Le bureau et les autres processus occupent environ 1 Go de la carte (base mesurée entre 0,2 et 1,0 Go selon l'instant).
+- Verdict : **dépasse 7,5 Go carte**. Plus élevé que l'estimation de 5,8 Go. Cause non identifiée : les activations du DiT dépassent l'estimation (hypothèse : attention d'action souris, caches souris de 0,65 Go non comptés dans l'estimation initiale).
+- Mesure de la RAM : non obtenue (le script s'arrête avant l'écriture du résultat).
